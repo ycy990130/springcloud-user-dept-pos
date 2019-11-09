@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script  src="../js/jquery.min.js"></script>
+    <script  src="../js/bootstrap3/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap3/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <script  src="../js/bootstrap-table/bootstrap-table.js"></script>
+    <script  src="../js/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-table/bootstrap-table.css"/>
+    <script  src="../js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script  src="../js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"/>
+    <script src="../js/bootstrap-bootbox/bootbox.js"></script>
+
+
+</head>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">高级搜索</div>
+    <div class="panel-body">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-1 control-label">员工名称</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="userNameId" name="userName">
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <button onclick="searchUser()" type="button" class="btn btn-info btn-lg btn-block"><i class="glyphicon glyphicon-search"></i>搜索</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="toolbar">
+    <button onclick="openAddDoctor()" type="button" class="btn btn-info"><i class="glyphicon glyphicon-plus"></i>新增</button>
+    <button onclick="delDoctorBtn()" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-minus"></i>删除</button>
+</div>
+<table id="userTableId"></table>
+
+<script type="text/javascript">
+
+
+
+    var res;
+    function createAddContent(url){
+        $.ajax({
+            url:url,
+            async:false,
+            success:function(data){
+                res = data;
+            }
+        });
+        return res;
+    }
+
+    //条查
+    function searchUser(){
+        var userName = $("#userNameId").val();
+        $("#userTableId").bootstrapTable('refresh',{
+            query:{
+                page:1,
+                userName:userName
+            }
+        })
+    }
+
+    //页面加载
+   $(function (){
+       initUserTable();
+   })
+
+   //条查分页
+    function initUserTable(){
+        $("#userTableId").bootstrapTable({
+            url:'../user/selectUserList',
+            method:'post',
+            toolbar:'#toolbar',
+            fit:true,
+            contentType:'application/x-www-form-urlencoded',//post请求按照表单方式
+            pagination:true,
+            pageSize:3,
+            pageList:[2,4,6,8,10],
+            pageNumber:1,
+            clickToSelect: true, //是否启用点击选中行
+            sidePagination:'server',//分页方式：client客户端分页，server服务端分页
+            striped:true,
+            showRefresh:true,
+            queryParams:function(){
+                return{
+                    page:this.pageNumber,
+                    rows:this.pageSize
+                }
+            },
+            columns:[
+                {field:'222',title:'11',checkbox:true},
+                {field:'userId',title:'员工编号'},
+                {field:'userName',title:'员工名称'},
+                {field:'userPosId',title:'职位编号'},
+                {field:'userDeptId',title:'部门编号'},
+                {field:'userPay',title:'薪资'},
+                {field:'userMotto',title:'座右铭'},
+                {field:'123',title:'操作',formatter:function(value,row,index){
+                        return '<a href="javascript:findDoctorById('+ row.userId +');" >修改</a>';
+                    }},
+            ]
+        })
+    }
+
+   //新增弹框
+   function openAddDoctor(){
+       alert("网络异常！请稍后重试")
+   }
+
+
+    //删除
+    function delDoctorBtn(){
+        alert("网络异常！请稍后重试")
+    }
+
+    //回显
+    function findDoctorById(id){
+        alert("网络异常！请稍后重试")
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.mapper.UserMapper" >
+
+
+    <select id="findCount" resultType="int" parameterType="com.jk.model.User">
+        select count(1) from t_userdeptpos
+        <where>
+            <if test="userName!=null and userName != ''">
+                userName like '%${userName}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="findUserList" resultType="com.jk.model.User">
+        select * from t_userdeptpos
+        <where>
+            <if test="user.userName!=null and user.userName != ''">
+                userName like '%${user.userName}%'
+            </if>
+        </where>
+        LIMIT #{start},#{end}
+    </select>
+
+
+
+</mapper>
